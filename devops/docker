@@ -2,7 +2,7 @@ docker --version
 docker pull < >
 docker images
 docker create 
-docker run -d/-p/-it/--name/-v  < >
+docker run -d/-p/-it/--name/-v /--net/-e < >
 docker ps  -a/-l/-n 
 docker exec -it < > /bin/bash
 docker rm  -f  < >
@@ -30,4 +30,7 @@ docker port < >
 docker diff < >
 docker top < >
 docker build 
+docker network create < >
+docker network ls
+docker-compose -f docker-compose.yaml up
 
