@@ -1,0 +1,33 @@
+docker --version
+docker pull < >
+docker images
+docker create 
+docker run -d/-p/-it/--name/-v  < >
+docker ps  -a/-l/-n 
+docker exec -it < > /bin/bash
+docker rm  -f  < >
+docker rmi < >
+docker restart < >
+docker pause  < >
+docker unpause  < >
+docker stop < >
+docker start < >
+docker kill < >
+docker commit < >  < >
+docker login
+docker push < >
+docker info
+sudo docker cp  < >  < >
+docker history < >
+docker logs < >
+docker stats
+docker search < >
+docker volume create
+docker volume ls
+docker rename 
+docker inspect < >
+docker port < >
+docker diff < >
+docker top < >
+docker build 
+
