@@ -33,4 +33,4 @@ docker build
 docker network create < >
 docker network ls
 docker-compose -f docker-compose.yaml up
-
+docker-compose -f docker-compose.yaml down
