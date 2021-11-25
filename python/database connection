@@ -1,0 +1,18 @@
+import mysql.connector
+mycon = sql.connector.connect(host=,user=,passwd=,database=)
+mycon.is_connected() -- returns True/False 
+mycur = mycon.cursor()
+mycur.execute(query,multi=True/False))
+mycur.fetchall()
+mycur.fetchone()
+mycur.fetchmany(n)
+mycur.rowcount
+mycon.close()
+mycon.commit()
+mycon.rooback()
+/****************/
+mycur.info()
+mycur.statement
+mycur.column_names
+mycur.executemany()
+mycur.callproc(name,args)
