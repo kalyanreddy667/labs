@@ -1,1 +1,27 @@
-print()
+print(object(s), sep=separator, end=end, file=, flush=)
+ use * for list unpacking
+
+
+string functions:
+
+list functions:
+
+tuple functions:
+
+set functions:
+
+dictionary functions:
+
+decorator:
+
+generator:
+
+list comprehension
+
+dictionary comprehension:
+
+lambda function:
+
+map function:
+
+filter function:
