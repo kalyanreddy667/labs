@@ -12,9 +12,18 @@ set functions:
 
 dictionary functions:
 
+Interator:
+
+
 decorator:
 
-generator:
+**generator:**
+def gen():
+    yield n
+    
+generator = (x**2 for x in my_list)
+sum(x**2 for x in my_list)
+max(x**2 for x in my_list)
 
 list comprehension
 
@@ -25,3 +34,9 @@ lambda function:
 map function:
 
 filter function:
+
+class :
+
+def __init__(self,param1...):
+def __next__(self):
+def __iter__(self):
