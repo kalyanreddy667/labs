@@ -1,21 +1,88 @@
+dir(__builtins__)
+
+unicode = u"\u00dcnic\u00f6de"
+raw_str = r"raw \n string"
+
 print(object(s), sep=separator, end=end, file=, flush=)
+input()
  use * for list unpacking
 
+**timeit module** 
 
 string functions:
 
-list functions:
+**Data Structures:**
+stacks and queue can be implemented using modules
+collections()
+queue()
 
-tuple functions:
+Linked list
 
-set functions:
+break,continue,pass
+for else,while else,if else. if elif else,
+range(start, stop,step_size)
 
-dictionary functions:
+**list functions:**
 
-Interator:
+num_list = [y if y>3 else 0 for y in range(100) if y % 2 == 0 if y % 5 == 0]
+transpose = [[row[i] for row in matrix] for i in range(2)]. --- nested list comprehension
+
+a.index(i)
+a.append(i)
+a.extend(b)
+a.insert(i,x)
+a.remove(i)
+a.count(i)
+a.pop(index)
+a.reverse()
+a.sort()
+a.copy()
+
+**tuple functions:**
+a.index(i) -- optionally provide start and end index
+a.count(i) -- can count list,tuple elements in tuple
 
 
-decorator:
+**set functions:**
+
+we cannot create empty set with {}
+a.clear()
+a.add(i)
+a.update() ---
+a.remove(i)  -- error exception when no element present
+a.discard(i) 
+a.difference(b) -- a-b -- a remains unchanged
+a.difference_update(b)   ---a-b. ---a updated
+a.intersection(b)
+a.interection_update(b)
+a.issubset(b)
+a.superset(b)
+a.disjoint(b). ---returns True if no common elements
+a.symmetric_difference(b)
+a.symmetric_difference_update(b)
+a.union(b)
+
+
+**dictionary functions:**
+even_dict = {k: v for (k, v) in original_dict.items() if v % 2 == 0}
+
+a.clear()
+dict.fromkeys(keys,value)
+{key:value for i in iterable}
+a.copy()
+a.get(key,defaultValue)
+a.items()
+a.keys()
+a.popitem()
+a.setdefault(key,optional default value)
+a.pop(key,optional default)
+a.values()
+a.update(dictionary/iterable pair)
+
+**Interator:**
+
+
+**decorator:**
 
 **generator:**
 def gen():
@@ -25,17 +92,30 @@ generator = (x**2 for x in my_list)
 sum(x**2 for x in my_list)
 max(x**2 for x in my_list)
 
-list comprehension
+**closure:**
+The enclosing function must return the nested function
+When there are few methods (one method in most cases) to be implemented in a class, closures can provide an alternate and more elegant solution
 
-dictionary comprehension:
+**list comprehension**
 
-lambda function:
+**dictionary comprehension:**
 
-map function:
+**lambda function:**
 
-filter function:
+**map function:**
 
-class :
+**filter function:**
+
+**reduce function:**
+
+**class :**
+class variable
+instance variable
+class method.  @classmethod
+instance method
+static method.  @staticmethod
+
+scope of Variable: LEGB  nonlocal/global
 
 def __init__(self,param1...):
 def __next__(self):
