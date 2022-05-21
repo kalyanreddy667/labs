@@ -1,3 +1,9 @@
+yaml is case sensitive
+access env varibale using $
+--- start of document
+... end of document
+{{ }}
+
 microservice:   #object
   app: user-authentication # single/double quote optional, use it when text contains special characters
   port: 9000
@@ -14,7 +20,47 @@ microservice:   #object
     - 1.9 # same as [1.7,1.8,1.9]
     deployed: true/false/on/off/yes/no  #boolean
     
+ {fruit:"mango",age:60}   
     
-    access env varibale using $
-    
-    
+|  keep multi line
+single: |
+first line
+second line
+> convert to single line
+double: >
+first line
+second line
+
+**specify date type***
+zero: !!date
+zero: !!timestamp
+zero: !!int 0
+zero: !!float 0.0
+zero: !!str 0
+zero: !!bool true
+zero: !!null null
+list: !!seq
+ - item1
+ - item2
+ - item3
+map: !!map
+name:kalyan
+map: !!pairs # same key can have multiple values
+ - name: kalyan
+ - name: kumar
+zero: null
+~/null/Null/NULL
+
+**re using**
+liking :&likes
+  fav: mango
+  hate: banana
+
+person1:
+ name: kalyan
+ <<: *likes
+person2:
+ name: kumar
+ <<: *likes
+ hate: apple #overwrite
+ 
