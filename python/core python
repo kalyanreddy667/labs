@@ -11,13 +11,6 @@ input()
 
 string functions:
 
-**Data Structures:**
-stacks and queue can be implemented using modules
-collections()
-queue()
-
-Linked list
-
 break,continue,pass
 for else,while else,if else. if elif else,
 range(start, stop,step_size)
@@ -120,3 +113,17 @@ scope of Variable: LEGB  nonlocal/global
 def __init__(self,param1...):
 def __next__(self):
 def __iter__(self):
+
+
+**Data Structures:**
+stack
+queue
+linkedlist - single, double, circular
+tree - full binary, complete binary, perfect binary, balanced binary, pathological binary
+graph - directional, undirectional, weighted, unweighted, cyclic, acyclic
+
+Linked list
+
+caching:
+from functools import lru_cache
+@lru_cache(maxsize=32)
