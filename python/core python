@@ -38,7 +38,7 @@ a.count(i) -- can count list,tuple elements in tuple
 
 **set functions:**
 
-we cannot create empty set with {}
+we cannot create empty set with {}, use set()
 a.clear()
 a.add(i)
 a.update() ---
@@ -54,6 +54,14 @@ a.disjoint(b). ---returns True if no common elements
 a.symmetric_difference(b)
 a.symmetric_difference_update(b)
 a.union(b)
+all()
+any()
+len()
+min()
+max()
+sum()
+sorted()
+enumerate()
 
 
 **dictionary functions:**
@@ -76,18 +84,41 @@ a.update(dictionary/iterable pair)
 
 
 **decorator:**
+function decorators
+class decorator  -- use __call__ method
 
-**generator:**
+@functools.wraps(func) --- saves function last state
+
+@property
+@classmethod
+@staticmethod
+
+***********generator:**************
 def gen():
     yield n
     
 generator = (x**2 for x in my_list)
 sum(x**2 for x in my_list)
 max(x**2 for x in my_list)
+print(sum(square(fibonacci_numbers(10))))
+
 
 **closure:**
 The enclosing function must return the nested function
 When there are few methods (one method in most cases) to be implemented in a class, closures can provide an alternate and more elegant solution
+
+def make_multiplier_of(n):
+    def multiplier(x):
+        return x * n
+    return multiplier
+# Multiplier of 3
+times3 = make_multiplier_of(3)
+# Multiplier of 5
+times5 = make_multiplier_of(5)
+
+All function objects have a __closure__ attribute that returns a tuple of cell objects if it is a closure function
+times5.__closure__[0].cell_contents
+
 
 **list comprehension**
 
@@ -101,7 +132,7 @@ When there are few methods (one method in most cases) to be implemented in a cla
 
 **reduce function:**
 
-**class :**
+***********class :************
 class variable
 instance variable
 class method.  @classmethod
@@ -110,6 +141,9 @@ static method.  @staticmethod
 
 scope of Variable: LEGB  nonlocal/global
 
+************iterator********************
+iter()
+next()
 def __init__(self,param1...):
 def __next__(self):
 def __iter__(self):
