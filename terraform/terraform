@@ -1,0 +1,8 @@
+- Use Terraform modules to reuse code, specially when creating multiple resources or working with multiple environments
+- Use loops like count and for_each to optimize repetitive resource creation inside your modules, like creating multiple subnets with just one block of resource code
+- Create releases of these Terraform modules using CI, you have to change the actual version of the new Terraform module before actually using it. This one is for safety
+- Try not to hardcode values inside your resources blocks. Use variables instead and centralize the values with terraform.tfvars file
+- Donot edit state file directly
+- configure terraform to store statefile in remote location like cloud/shared location
+- backup state file
+- use one state file for each environment
