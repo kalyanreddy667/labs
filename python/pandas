@@ -1,0 +1,52 @@
+df = pd.read_csv ('Path where the CSV file is stored\File name.csv')
+print(df)  
+print(df.to_string()) 
+print(pd.options.display.max_rows)
+pd.options.display.max_rows = 9999
+df.head()
+df.tail()
+df.info()
+df.shape
+df.append(df)
+df.drop_duplicates()
+movies_df.dropna()
+temp_df.drop_duplicates(inplace=True, keep=False/first/last)
+movies_df.columns
+movies_df.rename(columns={
+        'Runtime (Minutes)': 'Runtime', 
+        'Revenue (Millions)': 'Revenue_millions'
+    }, inplace=True)
+
+df2 = df.mean(skipna = False)  # include nulls
+df.fillna(130, inplace = True) 
+print(data.sort_values(by='x1', ascending = False))
+
+print(data[['group1','x1']].groupby('group1').mean()) # Print pandas DataFrame
+
+data = {
+    'apples': [3, 2, 0, 1], 
+    'oranges': [0, 3, 7, 2]
+}
+purchases = pd.DataFrame(data)
+
+purchases = pd.DataFrame(data, index=['June', 'Robert', 'Lily', 'David'])
+
+purchases.loc['June']
+
+df = pd.read_csv('purchases.csv', index_col=0)
+df = pd.read_json('purchases.json')
+
+# block 1 - simple stats
+mean1 = df['Salary'].mean()
+sum1 = df['Salary'].sum()
+max1 = df['Salary'].max()
+min1 = df['Salary'].min()
+count1 = df['Salary'].count()
+median1 = df['Salary'].median() 
+std1 = df['Salary'].std() 
+var1 = df['Salary'].var() 
+
+
+data['x1'].mean()
+data.mean()
+data.groupby(['a','b']).mean()
