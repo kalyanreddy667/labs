@@ -1,11 +1,11 @@
 ## Commands
 > * yum install docker
-> * cd/var/lib/docker
+> * cd /var/lib/docker
 > * docker -version
 > * docker images
 > * docker create [image]
-> * docker run [image] (-itd, -it, -td, --rm, -it-rm )
-> * docker exec
+> * docker run [image] (-itd, -it, -td, --rm, -it-rm, -d, -p, --name, --net )
+> * docker exec [container] (-it)
 > * docker cp
 > * docker export [container]
 > * docker attach [container]
@@ -44,6 +44,8 @@
 > * docker volume ls
 > * docker volume rm
 > * docker volume prune
+> * docker system prune (-all)
+> * docker-compose -f file.yaml up/down
 
 
 
