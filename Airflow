@@ -1,0 +1,35 @@
+When the “with” statement is executed, the method __enter__() is called ( creating a context manager ) and assigns the value returned by __enter__() to the variable defined by as which is conn in our example. 
+The variable conn becomes only available within the block below the “with” statement. Once the block ends, the variable conn goes out of scope triggering the special method __exit__() to clean up the resource. 
+Notice that if an exception is thrown from the “with” block, the resource will still be well cleaned.
+
+from datetime import datetime
+from airflow import DAG
+from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
+from airflow.operators.bash import BashOperator
+
+with DAG('my_dag',
+schedule_interval='0 12 * * *',
+start_date=datetime(2019, 1, 10), catchup=False) as dag:
+dummy_task 	= DummyOperator(task_id='dummy_task', retries=3)
+python_task	= PythonOperator(task_id='python_task', python_callable=my_func)
+dummy_task >> python_task
+
+
+Python Operator :
+def my_func(*op_args):
+print(op_args)
+return op_args[0]
+with DAG('python_dag', description='Python DAG', schedule_interval='*/5 * * * *', start_date=datetime(2018, 11, 1), catchup=False) as dag:
+dummy_task      = DummyOperator(task_id='dummy_task', retries=3)
+python_task     = PythonOperator(task_id='python_task', python_callable=my_func, op_args=['one', 'two', 'three'])
+dummy_task >> python_task
+
+def my_func(**kwargs):
+print(kwargs)
+return kwargs['param_1']
+with DAG('python_dag', description='Python DAG', schedule_interval='*/5 * * * *', start_date=datetime(2018, 11, 1), catchup=False) as dag:
+dummy_task      = DummyOperator(task_id='dummy_task', retries=3)
+python_task     = PythonOperator(task_id='python_task', python_callable=my_func, op_kwargs={'param_1': 'one', 'param_2': 'two', 'param_3': 'three'})
+dummy_task >> python_task
+
