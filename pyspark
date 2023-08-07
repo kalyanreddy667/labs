@@ -1,0 +1,18 @@
+import pyspark
+from pyspark import SparkContext
+from pyspark.sql import Row
+from pyspark.sql import SQLContext
+
+sc =SparkContext()
+sqlContext = SQLContext(sc)
+
+nums= sc.parallelize([1,2,3,4])
+rdd2 = sc.textFile("/path/test.txt")
+nums.take(1)
+squared = nums.map(lambda x: x*x).collect()
+for num in squared:
+    print('%i ' % (num))
+
+
+df.printSchema()
+df.show()
