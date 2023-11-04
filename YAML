@@ -2,12 +2,19 @@ yaml is case sensitive
 access env varibale using $
 --- start of document
 ... end of document
-{{ }}
+{{ }} template 
 
 microservice:   #object
   app: user-authentication # single/double quote optional, use it when text contains special characters
   port: 9000
   version: 1.7
+
+multiline : |-
+line1
+line2
+singleline : >-
+line1
+line2
 
 #comments 
 
@@ -43,6 +50,9 @@ list: !!seq
  - item1
  - item2
  - item3
+set: !!set
+ ? item1
+ ? item2
 map: !!map
 name:kalyan
 map: !!pairs # same key can have multiple values
@@ -58,9 +68,10 @@ liking :&likes
 
 person1:
  name: kalyan
- <<: *likes
+ liking: *likes
 person2:
  name: kumar
+ liking:
  <<: *likes
  hate: apple #overwrite
  
