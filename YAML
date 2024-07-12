@@ -39,13 +39,14 @@ first line
 second line
 
 **specify date type***
-zero: !!date
-zero: !!timestamp
+zero: !!timestamp #for date also
 zero: !!int 0
 zero: !!float 0.0
 zero: !!str 0
 zero: !!bool true
 zero: !!null null
+zero: null
+~/null/Null/NULL
 list: !!seq
  - item1
  - item2
@@ -55,11 +56,11 @@ set: !!set
  ? item2
 map: !!map
 name:kalyan
+
 map: !!pairs # same key can have multiple values
  - name: kalyan
  - name: kumar
-zero: null
-~/null/Null/NULL
+
 
 **re using**
 liking :&likes
@@ -72,6 +73,6 @@ person1:
 person2:
  name: kumar
  liking:
- <<: *likes
- hate: apple #overwrite
+  <<: *likes
+  hate: apple  #overwrite
  
