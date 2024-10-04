@@ -8,21 +8,137 @@ Hello {{ name }}!
 /***************************************************************************/
 {% if score > 80 %}
 
+{% elif score > 80 %}
+
 {% else %}
 
 {% endif %}
 
+{% extends layout_template if layout_template is defined else 'master.html' %}
 /***************************************************************************/
   {% for student in students %}
 
   {% endfor %}
-  
-  
+
+{% for key, value in fruit.items() %}
+   {% endfor %} 
+
+{% break %}
+{% continue %}
+
+range([start, ]stop[, step])
+
+{% with %}
+    {% set foo = 42 %}
+    {{ foo }}           foo is 42 here
+{% endwith %}
+
+loop.index	
+loop.index0
+loop.revindex
+loop.revindex0
+loop.first
+loop.last
+loop.length
+loop.cycle
+loop.depth
+loop.depth0
+loop.previtem
+loop.nextitem
+loop.changed(*val)
+	
+
 /***************************************************************************/
   {% macro %}   {% endmacro %}
   
   {% extends %}
   {% block %}    {% endblock %}
   {% include %}
-  
   /***************************************************************************/
+whitespaces
+{%- if  -%} 
+test
+{% endif %}
+
+Escaping
+{{ '{{' }}
+{% raw %}
+{% endraw %}
+
+  /***************************************************************************/
+ abs(),	
+float()
+lower()
+round()
+tojson()
+attr()
+forceescape()
+map()
+safe()
+trim()
+batch()
+format()
+max()
+select()
+truncate()
+capitalize()
+groupby()
+min()
+selectattr()
+unique()
+center()
+indent()
+pprint()
+slice()
+upper()
+default()
+int()
+random()
+sort()
+urlencode()
+dictsort()
+join()
+reject()
+string()
+urlize()
+escape()
+last()
+rejectattr()
+striptags()
+wordcount()
+filesizeformat()
+length()
+replace()
+sum()
+wordwrap()
+first()
+list()
+reverse()
+title()
+xmlattr()
+
+  /***************************************************************************/
+callable()
+even()
+le()
+none()
+string()
+defined()
+ge()
+lower()
+number()
+undefined()
+divisibleby()
+gt()
+lt()
+odd()
+upper()
+eq()	
+in()
+mapping()
+sameas()
+escaped()
+iterable()
+ne()
+sequence()
+	
