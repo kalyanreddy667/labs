@@ -1,0 +1,102 @@
+--instructions
+--
+--If you want to simply see which tables/views exist in Snowflake, that are not in the dbt graph:
+--dbt run-operation delete_orphaned_tables --args "{dry_run: True}"
+--
+--if you want to actually drop those tables/views:
+--dbt run-operation delete_orphaned_tables --args "{dry_run: False}"
+--
+--Note by default this macro will look in the database specified in your default target, as defined in your profiles.yml.
+--you can be explicit about the database, by specifying a different target (add --target argument), 
+--but you will need to set up targets per database, i.e. not just dev/prod, but for example:
+--  dev
+--  dev-raw
+--  dev-analytics
+--  prod
+--
+--so then you might run for example:
+--dbt run-operation delete_orphaned_tables --args "{dry_run: True}" --target dev-analytics
+
+{% macro delete_orphaned_tables(dry_run=False) %}
+  
+  {% do log("", True) %} 
+  {% do log("Searching for orphaned tables/views...", True) %}
+  {% do log("Using target profile: " ~ target.name ~ " (database: " ~ target.database ~ ").", True) %} 
+
+  {% set schema_query %}
+      SELECT distinct table_schema
+      from (
+        SELECT distinct table_schema
+        FROM information_schema.tables
+        UNION ALL
+        SELECT distinct table_schema
+        FROM information_schema.views
+      ) u
+      where table_schema <> 'INFORMATION_SCHEMA'
+  {% endset %}
+
+  {#
+    {% do log(schema_query, True) %} 
+  #}
+  {%- set result = run_query(schema_query) -%}
+  {% if result %}
+    {%- for row in result -%}
+      {% set schema = row[0] %}
+      
+      {% do log("", True) %} 
+      {% do log("schema: " ~ schema, True) %} 
+    
+      {% set query %}
+        SELECT UPPER(c.schema_name) AS schema_name,
+                UPPER(c.ref_name) AS ref_name,
+                UPPER(c.ref_type) AS ref_type
+        FROM (
+          SELECT table_schema AS schema_name,
+                  table_name  AS ref_name,
+                  'table'    AS ref_type
+          FROM information_schema.tables pt
+          WHERE table_schema = '{{ schema }}'      
+          AND TABLE_TYPE = 'BASE TABLE'
+          UNION ALL
+          SELECT table_schema AS schema_name,
+                  table_name   AS ref_name,
+                  'view'     AS ref_type
+          FROM information_schema.views
+            WHERE table_schema = '{{ schema }}'
+                ) AS c
+          LEFT JOIN (
+            {%- for node in graph.nodes.values() | selectattr("resource_type", "equalto", "model") | list
+                          + graph.nodes.values() | selectattr("resource_type", "equalto", "seed")  | list %}
+              SELECT
+              upper('{{node.config.schema}}') AS schema_name
+                ,upper('{{node.name}}') AS ref_name
+              {% if not loop.last %} UNION ALL {% endif %}
+            {%- endfor %}
+          ) AS desired on desired.schema_name = c.schema_name
+                      and desired.ref_name    = c.ref_name
+          WHERE desired.ref_name is null
+      {% endset %}
+
+      {#
+      {% do log(query, True) %} 
+      #}
+      
+      {%- set result = run_query(query) -%}
+      {% if result %}
+          {%- for to_delete in result -%}
+            {%- if dry_run -%}
+                {%- do log('To be dropped: ' ~ to_delete[2] ~ ' ' ~ to_delete[0] ~ '.' ~ to_delete[1], True) -%}
+            {%- else -%}
+                {% set drop_command = 'DROP ' ~ to_delete[2] ~ ' IF EXISTS ' ~ to_delete[0] ~ '.' ~ to_delete[1] ~ ' CASCADE;' %}
+                {% do run_query(drop_command) %}
+                {%- do log('Dropped ' ~ to_delete[2] ~ ' ' ~ to_delete[0] ~ '.' ~ to_delete[1], True) -%}
+            {%- endif -%}
+          {%- endfor -%}
+      {% else %}
+        {% do log('No orphan tables to clean.', True) %}
+      {% endif %}
+
+    {%- endfor -%}
+  {% endif %}
+
+{% endmacro %}
