@@ -1,0 +1,81 @@
+{# 
+
+    Overview:
+        This macro finds developer schemas or PR schemas by prefix and drops them.
+        Will only drop schemas that start with "DBT_" as a safety catch so we don't drop production schemas.
+
+    Arguments:
+        
+        - database_to_clean:
+            - Default: 'DEV_PII_AND_NONPII_TRANSFORMED'
+            - Definition: The name of the database in which the schemas to be dropped are located (e.g. 'DEV_PII_AND_NONPII_TRANSFORMED', 'DEV', etc.)
+        
+        - dbt_schema_prefix:
+            - Default: Whatever the current target schema is. If you're in the dbt Cloud IDE and/or dbt Core, it be will whatever your personal devleoper schema is called e.g., 'PPETERSON'. If run in the context of a pull-request will be that PR-specific schema e.g., 'CLOUD_PR_566736_951'.
+            - Definition: The schema prefix that appears at the start of all of the schemas that should be dropped (excluding the 'DBT_' part).
+            - Notes:
+                - MUST be a schema prefix that starts with "DBT_", however, when passing this argument, DO NOT include the "DBT_" part, e.g. to specify the schema 'DBT_PPETERSON', enter 'PPETERSON' as the value for this argument.
+                - In general, dbt users only have privileges to drop schemas they created, so if you try to drop someone else's developer schemas or if you try to drop a CLOUD_PR schema from within the Cloud IDE and/or dbt Core, it will throw an error.
+        
+        - age_in_days:
+            - Default: 0
+            - Definition: Will only drop schemas this many days old or older. Could be used, for example, if you want to drop all CLOUD_PR schemas that are more than 3 days old.
+        
+        - dry_run:
+            - Default: True
+            - Definiton: When set to "True" does a "dry run", which returns a list of which schemas _would_ be dropped if run "for real", but doesn't actually drop them. Set to "False" to actually drop the schemas. 
+
+    Examples:
+
+        - dbt run-operation schema_cleanup
+            - Dry run. Shows a list the schema drop statements that _would_ be executed but doesn't actually run them. Lists schemas with the current "target" schema prefix in the DEV_PII_AND_NONPII_TRANSFORMED database. When run from the dbt Cloud IDE, the "target" schema prefix will be your developer prefix (e.g., "DBT_PPETERSON"). When run from a Slim CI job, the "target" schema prefix will be the prefix for that PR (e.g., "DBT_CLOUD_PR_566736_951")
+
+        - dbt run-operation schema_cleanup --args "{'dry_run': False}"
+            - Drop all schemas with the current "target" schema prefix in the DEV_PII_AND_NONPII_TRANSFORMED database. When run from the dbt Cloud IDE, the "target" schema prefix will be your developer prefix (e.g., "DBT_PPETERSON"). When run from a Slim CI job, the "target" schema prefix will be the prefix for that PR (e.g., "DBT_CLOUD_PR_566736_951")
+
+        - dbt run-operation schema_cleanup --args "{'dbt_schema_prefix': 'PPETERSON'}"
+            - Dry run. Shows a list the schema drop statements that _would_ be executed but doesn't actually run them. Lists schemas with the prefix DBT_PPETERSON in the DEV_PII_AND_NONPII_TRANSFORMED database
+
+        - dbt run-operation schema_cleanup --args "{'dbt_schema_prefix': 'PPETERSON', 'dry_run': False}"
+            - Drop all schemas with the prefix DBT_PPETERSON in the DEV_PII_AND_NONPII_TRANSFORMED database
+
+        - dbt run-operation schema_cleanup --args "{'database_to_clean': 'DEV', 'dbt_schema_prefix': 'PPETERSON', 'dry_run': False}"
+            - Drop all schemas with the prefix DBT_PPETERSON in the DEV database
+
+        - dbt run-operation schema_cleanup --args "{'dbt_schema_prefix': 'CLOUD_PR', 'age_in_days':'3', 'dry_run': False}"
+            - Drop all schemas with the prefix DBT_CLOUD_PR in the DEV_PII_AND_NONPII_TRANSFORMED database
+
+#}
+
+{% macro schema_cleanup(database_to_clean = 'DEV_PII_AND_NONPII_TRANSFORMED', dbt_schema_prefix = (target.schema | replace('dbt_','')), age_in_days = '0', dry_run=True) %}
+	
+	    {% set find_schemas %}
+	        select 
+	            'drop schema {{ database_to_clean }}.'||schema_name||';'
+	        from {{ database_to_clean }}.information_schema.schemata
+	        where
+	            catalog_name = '{{ database_to_clean | upper }}'
+	            and schema_name ilike 'DBT_{{ dbt_schema_prefix }}%'
+	            {% if age_in_days != '0' %}
+	            and last_altered <= (current_date() - interval '{{ age_in_days }} days')
+	            {% endif %}
+	    {% endset %}
+
+    {% if execute %}
+        {% if dry_run | as_bool == True %}
+            {{ log('The following schema drop statements will not be executed. To execute them, re-run the macro with the parameter dry_run set to False:' ,True) }}
+        {% else %}
+            {{ log('Schema drop statements executed:' ,True) }}
+        {% endif %}
+
+        {% set schema_drop_list = run_query(find_schemas).columns[0].values() %}
+
+        {% for schema_to_drop in schema_drop_list %}
+            {{ log(schema_to_drop ,True) }}
+            {% if dry_run | as_bool == False %}
+                {% do run_query(schema_to_drop) %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+{% endmacro %}
